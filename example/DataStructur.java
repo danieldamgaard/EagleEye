@@ -1,6 +1,7 @@
-package main;
+package example;
 
 import java.util.List;
+import main.Master;
 import org.pi4.locutil.MACAddress;
 import org.pi4.locutil.trace.SignalStrengthSamples;
 import org.pi4.locutil.trace.TraceEntry;
