@@ -3,10 +3,7 @@ package org.pi4.locutil.trace.macfilter;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 import org.pi4.locutil.MACAddress;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * MacFilterExclude excludes given MAC addresses from a set of MAC addresses. This class is supposed
@@ -51,6 +48,6 @@ public class MacFilterExclude implements MacFilter {
 
 	@Override
 	public Set<MACAddress> getMacs() {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 }
