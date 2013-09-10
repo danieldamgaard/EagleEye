@@ -2,7 +2,10 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import javax.swing.JTextArea;
 import org.pi4.locutil.io.TraceGenerator;
 import org.pi4.locutil.trace.Parser;
 import org.pi4.locutil.trace.TraceEntry;
@@ -20,7 +23,13 @@ public class Master {
     
     // --
     
+    public void setConsole(JTextArea console){
+        this.console = console;
+    }
+    
     private Master(){
+        debugLevel = 4; // Info (Alt)
+        
         TraceGenerator();
     }
     
@@ -30,11 +39,11 @@ public class Master {
         
         File offlineFile = new File(offlinePath);
         Parser offlineParser = new Parser(offlineFile);
-        System.out.println("Offline File: " +  offlineFile.getAbsoluteFile());
+        Debug(4, "Offline File: " +  offlineFile.getAbsoluteFile());
 
         File onlineFile = new File(onlinePath);
         Parser onlineParser = new Parser(onlineFile);
-        System.out.println("Online File: " + onlineFile.getAbsoluteFile());
+        Debug(4, "Online File: " + onlineFile.getAbsoluteFile());
         
         try {
             int offlineSize = 25;
@@ -62,9 +71,37 @@ public class Master {
         return onlineTrace;
     }
     
+    public void ConsoleWriteBase(String message){
+        console.append(message);
+    }
+    
+    public void ConsoleWrite(String message){
+        Date myDate = new Date();
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String myDateString = myFormat.format(myDate);
+        
+        ConsoleWriteBase("["+myDateString+"] "+message+"\n");
+    }
+    
+    public void ConsoleWriteError(String message){
+        ConsoleWrite("[Error] "+message);
+    }
+    
+    public boolean Debug(int debugLevel){
+        return debugLevel <= this.debugLevel;
+    }
+    
+    public void Debug(int debugLevel, String message){
+        if(Debug(debugLevel)){
+            System.out.println(message);
+        }
+    }
+    
     private String offlinePath;
     private String onlinePath;
     private TraceGenerator tg;
     private List<TraceEntry> offlineTrace;
     private List<TraceEntry> onlineTrace;
+    private JTextArea console;
+    private int debugLevel; // 0: None, 1: Fatal-errors, 2: Errors, 3: Warnings, 4: Info
 }
