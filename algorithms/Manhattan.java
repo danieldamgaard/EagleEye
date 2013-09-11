@@ -10,8 +10,13 @@ public class Manhattan implements DistanceAlgorithm {
     distances.add(distance);
   }
   
-  public Manhattan(){
+  @Override
+  public final void Clear(){
     distances = new ArrayList<>();
+  }
+  
+  public Manhattan(){
+    Clear();
   }
   
   @Override

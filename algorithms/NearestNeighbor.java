@@ -9,15 +9,13 @@ public class NearestNeighbor implements PositioningAlgorithm {
   private Master m;
   private TraceEntry actual;
   private LocalizationAlgorithm lAlgorithm;
-  private DistanceAlgorithm dAlgorithm;
   private HashMap<TraceEntry, Double> distances;
   
-  public NearestNeighbor(TraceEntry actual, LocalizationAlgorithm lAlgorithm, DistanceAlgorithm dAlgorithm){
+  public NearestNeighbor(TraceEntry actual, LocalizationAlgorithm lAlgorithm){
     m = Master.Inst();
     
     this.actual = actual;
     this.lAlgorithm = lAlgorithm;
-    this.dAlgorithm = dAlgorithm;
     this.distances = new HashMap();
     
     this.lAlgorithm.setActual(actual);
@@ -33,11 +31,20 @@ public class NearestNeighbor implements PositioningAlgorithm {
     for(TraceEntry entry: distances.keySet()){
       Double distance = distances.get(entry);
       
+      if(distance == null){
+        m.Debug(4, "[Skip] There was no APs from actual in this entry (Pos: "+entry.getGeoPosition()+", Time: "+entry.getTimestamp()+", MAC: "+entry.getId()+")");
+        continue;
+      }
+      
+      m.Debug(4, "[Compare distances] current distance: "+distance+", smallest distance: "+smallestDistance+".");
+      
       if(distance < smallestDistance){
         smallestDistance = distance;
         smallestEntry = entry;
       }
     }
+    
+    m.Debug(4, "[NN] Smallest entry: "+smallestEntry.getGeoPosition()+" (MAC: "+smallestEntry.getId()+") (Time: "+smallestEntry.getTimestamp()+"), smallest distance: "+smallestDistance+".");
     
     return smallestEntry.getGeoPosition();
   }

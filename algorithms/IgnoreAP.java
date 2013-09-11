@@ -1,6 +1,7 @@
 package algorithms;
 
 import java.util.List;
+import main.Master;
 import org.pi4.locutil.MACAddress;
 import org.pi4.locutil.trace.SignalStrengthSamples;
 import org.pi4.locutil.trace.TraceEntry;
@@ -25,7 +26,11 @@ public class IgnoreAP implements LocalizationAlgorithm {
   
   @Override
   public Double CompareTo(TraceEntry entry) {
+    Master m = Master.Inst();
+    algorithm.Clear();
     SignalStrengthSamples entrySss = entry.getSignalStrengthSamples();
+    
+    boolean containsAnyAP = false;
     
     for(MACAddress actualMac : actualAps){
       if(entrySss.containsKey(actualMac)){
@@ -33,11 +38,24 @@ public class IgnoreAP implements LocalizationAlgorithm {
         Double entrySs = entrySss.getAverageSignalStrength(actualMac);
         Double difference = actualSs - entrySs;
         
+        m.Debug(4, "Actual SS: "+actualSs+", Entry SS: "+entrySs+", Difference: "+difference+" (MAC: "+actualMac+").");
+        
         algorithm.Add(difference);
+        containsAnyAP = true;
+      }else{
+        m.Debug(4, "The access point (AP) is not in the fingerprint (MAC: "+actualMac+").");
       }
     }
     
-    return algorithm.Calculate();
+    if(!containsAnyAP){
+      return null;
+    }
+    
+    Double totalDistance = algorithm.Calculate();
+    
+    m.Debug(4, "Total distance: "+totalDistance+" ([Actual] Pos: "+actual.getGeoPosition()+", Time: "+actual.getTimestamp()+", MAC: "+actual.getId()+").");
+    
+    return totalDistance;
   }
   
 }

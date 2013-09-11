@@ -17,11 +17,13 @@ public class FingerprintingNN {
     LocalizationAlgorithm lAlgorithm = new IgnoreAP(dAlgorithm);
     
     for(TraceEntry entry: m.getOnlineTrace()) {
-      NearestNeighbor nn = new NearestNeighbor(entry, lAlgorithm, dAlgorithm);
+      NearestNeighbor nn = new NearestNeighbor(entry, lAlgorithm);
       
       GeoPosition pos = nn.Position();
       
-      m.ConsoleWrite("Estimeret: "+pos+", Actual: "+entry.getGeoPosition());
+      String status = "Estimeret: "+pos+" , Actual: "+entry.getGeoPosition();
+      m.ConsoleWrite(status);
+      m.Debug(4, status);
       
       break; // Temp: Only the first
     }

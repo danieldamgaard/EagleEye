@@ -10,8 +10,13 @@ public class Euclidean implements DistanceAlgorithm {
     distances.add(distance);
   }
   
-  public Euclidean(){
+  @Override
+  public final void Clear(){
     distances = new ArrayList<>();
+  }
+  
+  public Euclidean(){
+    Clear();
   }
   
   @Override
@@ -19,7 +24,7 @@ public class Euclidean implements DistanceAlgorithm {
     double total = 0;
     
     for(Double distance : distances){
-      total += Math.pow(distance, 2);
+      total += Math.pow(distance, 2.0);
     }
     
     return Math.sqrt(total);
