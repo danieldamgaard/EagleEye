@@ -17,7 +17,7 @@ public class FingerprintingNN {
     LocalizationAlgorithm lAlgorithm = new IgnoreAP(dAlgorithm);
     
     for(TraceEntry entry: m.getOnlineTrace()) {
-      NearestNeighbor nn = new NearestNeighbor(entry, lAlgorithm);
+      KNearestNeighbor nn = new KNearestNeighbor(entry, lAlgorithm);
       
       GeoPosition pos = nn.Position();
       
