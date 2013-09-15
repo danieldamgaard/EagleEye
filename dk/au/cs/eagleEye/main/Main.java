@@ -1,4 +1,4 @@
-package main;
+package dk.au.cs.eagleEye.main;
 
 import example.DataStructur;
 

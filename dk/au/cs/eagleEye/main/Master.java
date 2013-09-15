@@ -1,4 +1,4 @@
-package main;
+package dk.au.cs.eagleEye.main;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JTextArea;
+import dk.au.cs.eagleEye.model.AccessPoint;
 import org.pi4.locutil.io.TraceGenerator;
 import org.pi4.locutil.trace.Parser;
 import org.pi4.locutil.trace.TraceEntry;
@@ -30,7 +31,21 @@ public class Master {
   private Master(){
     debugLevel = 4; // Info (Alt)
 
+    loadAccessPoints(); //-- Tilføjet til at parse ap listen!
     TraceGenerator();
+  }
+  
+  private void loadAccessPoints(){
+    apPath = "data/MU.AP.positions";
+    
+    File apFile = new File(apPath);
+    AccessPointParser apParser = new AccessPointParser(apFile);
+    
+    try {
+      accessPoints = apParser.parse();
+    } catch (NumberFormatException | IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private void TraceGenerator(){
@@ -74,6 +89,10 @@ public class Master {
   public List<TraceEntry> getBaseTrace(){
     return baseTrace;
   }
+  
+  public List<AccessPoint> getAccessPoints() {
+    return accessPoints;
+  }
 
   public void ConsoleWriteBase(String message){
     console.append(message);
@@ -103,10 +122,12 @@ public class Master {
 
   private String offlinePath;
   private String onlinePath;
+  private String apPath;
   private TraceGenerator tg;
   private List<TraceEntry> offlineTrace;
   private List<TraceEntry> onlineTrace;
   private List<TraceEntry> baseTrace;
+  private List<AccessPoint> accessPoints;
   private JTextArea console;
   private int debugLevel; // 0: None, 1: Fatal-errors, 2: Errors, 3: Warnings, 4: Info
 }

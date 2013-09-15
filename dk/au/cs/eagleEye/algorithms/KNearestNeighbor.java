@@ -1,7 +1,7 @@
-package algorithms;
+package dk.au.cs.eagleEye.algorithms;
 
 import java.util.HashMap;
-import main.Master;
+import dk.au.cs.eagleEye.main.Master;
 import org.pi4.locutil.GeoPosition;
 import org.pi4.locutil.trace.TraceEntry;
 

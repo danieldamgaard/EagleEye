@@ -1,7 +1,7 @@
-package algorithms;
+package dk.au.cs.eagleEye.algorithms;
 
 import java.util.List;
-import main.Master;
+import dk.au.cs.eagleEye.main.Master;
 import org.pi4.locutil.MACAddress;
 import org.pi4.locutil.trace.SignalStrengthSamples;
 import org.pi4.locutil.trace.TraceEntry;

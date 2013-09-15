@@ -1,4 +1,4 @@
-package algorithms;
+package dk.au.cs.eagleEye.algorithms;
 
 import java.util.ArrayList;
 
