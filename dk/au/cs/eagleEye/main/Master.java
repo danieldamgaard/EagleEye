@@ -29,10 +29,10 @@ public class Master {
   }
 
   private Master(){
-    debugLevel = 4; // Info (Alt)
+    debugLevel = 1; // Info (Alt)
 
     loadAccessPoints(); //-- Tilføjet til at parse ap listen!
-    TraceGenerator();
+    traceGenerator();
   }
   
   private void loadAccessPoints(){
@@ -48,7 +48,7 @@ public class Master {
     }
   }
 
-  private void TraceGenerator(){
+  private void traceGenerator(){
     offlinePath = "data/MU.1.5meters.offline.trace";
     onlinePath = "data/MU.1.5meters.online.trace";
 
@@ -68,10 +68,10 @@ public class Master {
       e.printStackTrace();
     }
 
-    Generate();
+    generate();
   }
 
-  public void Generate(){
+  public void generate(){
     tg.generate();
 
     offlineTrace = tg.getOffline();

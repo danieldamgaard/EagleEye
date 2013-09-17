@@ -38,7 +38,7 @@ public class LocUtilExample {
       int onlineSize = 5;
       tg = new TraceGenerator(offlineParser, onlineParser,offlineSize,onlineSize);
 
-      //Generate traces from parsed files
+      //generate traces from parsed files
       tg.generate();
 
       //Iterate the trace generated from the offline file

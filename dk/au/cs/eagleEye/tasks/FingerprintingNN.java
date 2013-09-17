@@ -11,12 +11,15 @@ import org.pi4.locutil.GeoPosition;
 import org.pi4.locutil.trace.TraceEntry;
 
 public class FingerprintingNN {  
-  public static void run(List<TraceEntry> fingerprintList){
+  public static void run(){
     Master m = Master.Inst();
+
     m.ConsoleWrite("[FingerprintingNN] Start");
-    
-    FingerprintingKNN.run(fingerprintList, 1);
+
+    m.setBaseTrace(m.getOfflineTrace());
+    KNNPositionEstimator.doSimulation(100, 1, "offlineFingerprintNN", true);
     
     m.ConsoleWrite("[FingerprintingNN] End");
+
   }
 }

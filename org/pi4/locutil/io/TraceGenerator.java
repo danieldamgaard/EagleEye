@@ -145,19 +145,19 @@ public class TraceGenerator {
 			// Check if the buckets still contain enough entries.
 			checkBucketSizes();
 			
-			// Generate the sets.
+			// generate the sets.
 			generateSets();
 		} else if (traceType.equals("RadarPUnknown")) {
 			// Check if the buckets still contain enough entries.
 			checkBucketSizes();
 			
-			// Generate the sets.
+			// generate the sets.
 			generateSets();
 		} else if (traceType.equals("Rice")) {
 			// Check if the buckets contain enough entries.
 			checkBucketSizes();
 
-			// Generate the sets.
+			// generate the sets.
 			generateSets();
 		} else {
 			throw new RuntimeException("Unknown traceType!");
@@ -450,7 +450,7 @@ public class TraceGenerator {
 	}
 	
 	private void generateSets() {	
-		// Generate the online set.
+		// generate the online set.
 		chooseOnlineSetBuckets();
 		if (verbose) System.out.println("TraceGenerator: Generating the online set ...");
 		onlineSet = new ArrayList<TraceEntry>();
@@ -477,7 +477,7 @@ public class TraceGenerator {
 			bucketCount++;
 		}
 			
-		// Generate the offline set.
+		// generate the offline set.
 		if (verbose) System.out.println("TraceGenerator: Generating the offline set ...");
 		offlineSet = new ArrayList<TraceEntry>();
 		Iterator<GeoPosition> bucketIterator = offlineTraceEntryBuckets.keySet().iterator();

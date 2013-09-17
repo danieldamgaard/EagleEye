@@ -6,33 +6,20 @@ import dk.au.cs.eagleEye.algorithms.IgnoreAP;
 import dk.au.cs.eagleEye.algorithms.KNearestNeighbor;
 import dk.au.cs.eagleEye.algorithms.LocalizationAlgorithm;
 import dk.au.cs.eagleEye.main.Master;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.pi4.locutil.GeoPosition;
 import org.pi4.locutil.trace.TraceEntry;
 
 public class FingerprintingKNN {
-  public static void run(List<TraceEntry> fingerprintList, int k){
+  public static void run(int numberOfNearest){
     Master m = Master.Inst();
-    m.ConsoleWrite("[FingerprintingKNN] Start, with k = " + k);
+    m.ConsoleWrite("[FingerprintingKNN] Start, with k = " + numberOfNearest);
 
-    // Use the given list for calculations
-    m.setBaseTrace(fingerprintList);
-    
-    DistanceAlgorithm dAlgorithm = new Euclidean();
-    LocalizationAlgorithm lAlgorithm = new IgnoreAP(dAlgorithm);
-    
-    for(TraceEntry entry: m.getOnlineTrace()) {
-      KNearestNeighbor nn = new KNearestNeighbor(entry, lAlgorithm, k);
-      
-      GeoPosition pos = nn.Position();
-      
-      String status = "Estimated "+pos+" , Actual: "+entry.getGeoPosition();
-      m.ConsoleWrite(status);
-      m.Debug(4, status);
-      
-      break; // Temp: Only the first
-    }
-    
+    m.setBaseTrace(m.getOfflineTrace());
+    KNNPositionEstimator.doSimulation(100, numberOfNearest, "offlineFingerprintKNN", true);
+
     m.ConsoleWrite("[FingerprintingKNN] End");
   }
 }

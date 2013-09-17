@@ -11,11 +11,10 @@ public class ModelNN {
     m.ConsoleWrite("[ModelNN] Start");
 
     ModelBuilder mBuilder = new ModelBuilder();
-    
-    
-    List<TraceEntry> modelFingerprints = mBuilder.generateModel(n, pd0, d0, 0, 0);
-    
-    FingerprintingNN.run(modelFingerprints);
+
+    List<TraceEntry> modelFingerprints = mBuilder.generateModel(n, pd0, d0, waf, c);
+    m.setBaseTrace(modelFingerprints);
+    KNNPositionEstimator.doSimulation(100, 1, "modelFingerprintNN", false);
     
     m.ConsoleWrite("[ModelNN] End");
   }

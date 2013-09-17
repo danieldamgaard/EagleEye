@@ -1,6 +1,7 @@
 package dk.au.cs.eagleEye.algorithms;
 
-import java.util.HashMap;
+import java.util.*;
+
 import dk.au.cs.eagleEye.main.Master;
 import org.pi4.locutil.GeoPosition;
 import org.pi4.locutil.trace.TraceEntry;
@@ -13,8 +14,9 @@ public class KNearestNeighbor implements PositioningAlgorithm {
   private HashMap<TraceEntry, Double> distances;
   private Double[] smallestDistances;
   private TraceEntry[] smallestEntries;
+  private List<TraceEntry> searchEntries;
 
-  public KNearestNeighbor(TraceEntry actual, LocalizationAlgorithm lAlgorithm, int numberOfNearest) {
+  public KNearestNeighbor(TraceEntry actual, LocalizationAlgorithm lAlgorithm, int numberOfNearest, boolean filterOnTime) {
     m = Master.Inst();
 
     this.actual = actual;
@@ -23,6 +25,11 @@ public class KNearestNeighbor implements PositioningAlgorithm {
     this.distances = new HashMap();
     smallestDistances = new Double[numberOfNearest];
     smallestEntries = new TraceEntry[numberOfNearest];
+    searchEntries = m.getBaseTrace();
+
+    if (filterOnTime) {
+      doTimeFilter();
+    }
 
     this.lAlgorithm.setActual(actual);
   }
@@ -35,8 +42,47 @@ public class KNearestNeighbor implements PositioningAlgorithm {
     return findAvarage();
   }
 
+  private void doTimeFilter() {
+    // Contains the best search results
+    List<TraceEntry> timeFilteredTrace = new ArrayList<TraceEntry>();
+    // Contains the best matching time for a given geo position.
+    Map<GeoPosition, Integer> timeFilteredTraceMap = new HashMap<GeoPosition, Integer>();
+
+    // Variables used for checking time differences.
+    GregorianCalendar entryDate = new GregorianCalendar();
+    GregorianCalendar actualDate = new GregorianCalendar();
+    actualDate.setTimeInMillis(actual.getTimestamp());
+
+    for (TraceEntry entry : searchEntries) {
+      entryDate.setTimeInMillis(entry.getTimestamp());
+
+      int actualTime = actualDate.get(Calendar.HOUR_OF_DAY)*3600 + actualDate.get(Calendar.MINUTE)*60 + actualDate.get(Calendar.SECOND);
+      int entryTime = entryDate.get(Calendar.HOUR_OF_DAY)*3600 + entryDate.get(Calendar.MINUTE)*60 + entryDate.get(Calendar.SECOND);
+      int timeDifference = Math.abs(actualTime-entryTime);
+
+      if (timeFilteredTraceMap.containsKey(entry.getGeoPosition())) {
+        int compareTime = timeFilteredTraceMap.get(entry.getGeoPosition());
+        if (timeDifference < compareTime) {
+          timeFilteredTraceMap.put(entry.getGeoPosition(), timeDifference);
+
+          for (int i=0; i<timeFilteredTrace.size(); i++) {
+            if (timeFilteredTrace.get(i).getGeoPosition().equals(entry.getGeoPosition())) {
+              timeFilteredTrace.set(i, entry);
+              break;
+            }
+          }
+        }
+      } else {
+        timeFilteredTraceMap.put(entry.getGeoPosition(), timeDifference);
+        timeFilteredTrace.add(entry);
+      }
+    }
+
+    this.searchEntries = timeFilteredTrace;
+  }
+
   private void compare() {
-    for (TraceEntry entry : m.getBaseTrace()) {
+    for (TraceEntry entry : searchEntries) {
       Double distance = lAlgorithm.CompareTo(entry);
 
       distances.put(entry, distance);

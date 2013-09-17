@@ -221,11 +221,11 @@ public class EagleEye extends javax.swing.JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
     private void fingerprintingNNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fingerprintingNNActionPerformed
-        FingerprintingNN.run(m.getOfflineTrace());
+        FingerprintingNN.run();
     }//GEN-LAST:event_fingerprintingNNActionPerformed
 
     private void fingerprintingKNNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fingerprintingKNNActionPerformed
-        FingerprintingKNN.run(m.getOfflineTrace(), 3);
+        FingerprintingKNN.run(3);
     }//GEN-LAST:event_fingerprintingKNNActionPerformed
 
     private void modelNNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modelNNActionPerformed
