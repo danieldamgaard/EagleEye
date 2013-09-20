@@ -12,7 +12,7 @@ public class Euclidean implements DistanceAlgorithm {
   
   @Override
   public final void Clear(){
-    distances = new ArrayList<>();
+    distances = new ArrayList<Double>();
   }
   
   public Euclidean(){

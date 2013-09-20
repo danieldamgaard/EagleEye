@@ -12,7 +12,7 @@ public class Manhattan implements DistanceAlgorithm {
   
   @Override
   public final void Clear(){
-    distances = new ArrayList<>();
+    distances = new ArrayList<Double>();
   }
   
   public Manhattan(){

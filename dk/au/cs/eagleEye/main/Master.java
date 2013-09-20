@@ -43,7 +43,7 @@ public class Master {
     
     try {
       accessPoints = apParser.parse();
-    } catch (NumberFormatException | IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -64,7 +64,7 @@ public class Master {
       int offlineSize = 25;
       int onlineSize = 5;
       tg = new TraceGenerator(offlineParser, onlineParser ,offlineSize, onlineSize);
-    } catch (NumberFormatException | IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
