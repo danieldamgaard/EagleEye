@@ -113,24 +113,22 @@ public class FingerprintingKNN {
     } catch (Exception e){
       m.ConsoleWrite("Fingerprinting Failed!: " + e.getMessage());
     }
-    
-    //KNNPositionEstimator.doSimulation(100, numberOfNearest, "offlineFingerprintKNN", true);
 
     m.ConsoleWrite("Fingerprinting: [" + runName + "] End");
   }
   
   public static void runMedianAvg(String runName, Boolean useEuclidean, int kValues[], int runs, Boolean writeToCsv){
     Master m = Master.Inst();
-    
-    for (int k : kValues){
-      m.ConsoleWrite("Fingerprinting: [" + runName + "] Start, with k = " + k);
 
-      try {
-        // Setup Result Logger!
-        ResultLogger logger = new ResultLogger();
-        logger.OpenLogger(runName, writeToCsv);
-        logger.WriteComment("k value; avg median over " + runs + " runs;");
+    m.ConsoleWrite("Fingerprinting: [" + runName + "] Start, with k = selected range!");
 
+    try {
+      // Setup Result Logger!
+      ResultLogger logger = new ResultLogger();
+      logger.OpenLogger(runName, writeToCsv);
+      logger.WriteComment("k value; avg median over " + runs + " runs;");
+
+      for (int k : kValues){
         // Run the algorithm! And write results!
         DistanceAlgorithm dAlgorithm = new Manhattan();
         if (useEuclidean){
@@ -142,7 +140,7 @@ public class FingerprintingKNN {
         double medianSumOverRuns = 0;
         for (int runIndex = 0; runIndex < runs; runIndex++){
           MedianAvgCalculator medianAvgCalculator = new MedianAvgCalculator();
-        
+
           m.generate();
           m.Debug(1, "Run: " + runIndex + ", k = " + k);
           for(TraceEntry entry : m.getOnlineTrace()) {
@@ -159,21 +157,21 @@ public class FingerprintingKNN {
 
             medianAvgCalculator.add(errorDistance);
           }
-          
+
           medianSumOverRuns += medianAvgCalculator.getAvg();
         }
-        
+
         logger.WriteRow(new Object[]{
           k,
           medianSumOverRuns / runs
         }, ';');
-
-        logger.CloseLogger();
-      } catch (Exception e){
-        m.ConsoleWrite("Fingerprinting Failed!: " + e.getMessage());
       }
 
-      m.ConsoleWrite("Fingerprinting: [" + runName + "] End");
+      logger.CloseLogger();
+    } catch (Exception e){
+      m.ConsoleWrite("Fingerprinting Failed!: " + e.getMessage());
     }
+
+    m.ConsoleWrite("Fingerprinting: [" + runName + "] End");
   }
 }

@@ -22,7 +22,7 @@ public class MedianAvgCalculator {
   public double getAvg(){
     Collections.sort(errorDistances);
     
-    if ((errorDistances.size() / 2.0) % 2 != 0){ // lookup
+    if (errorDistances.size() % 2 != 0){ // lookup
       int firstIndex = (int)(errorDistances.size() / 2.0);
       
       return (errorDistances.get(firstIndex) + errorDistances.get(firstIndex + 1)) / 2;

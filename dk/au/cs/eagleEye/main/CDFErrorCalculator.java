@@ -7,6 +7,8 @@ package dk.au.cs.eagleEye.main;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  *
@@ -30,6 +32,17 @@ public class CDFErrorCalculator {
   }
   
   public Object[][] getResultSet(){
+    // Sort and sum each intervals value with all smaller values...
+    int sumOfCurrentSmallest = 0;
+    SortedSet<Integer> sortetKey = new TreeSet<Integer>(cdfErrorMap.keySet());
+    for (int key : sortetKey) { 
+       int value = cdfErrorMap.get(key);
+       cdfErrorMap.put(key, value + sumOfCurrentSmallest);
+       
+       sumOfCurrentSmallest += value;
+    }
+    
+    
     Object[][] results = new Object[cdfErrorMap.size()][2];
     
     int index = 0;
