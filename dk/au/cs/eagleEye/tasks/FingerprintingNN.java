@@ -1,25 +1,26 @@
 package dk.au.cs.eagleEye.tasks;
 
-import dk.au.cs.eagleEye.algorithms.IgnoreAP;
-import dk.au.cs.eagleEye.algorithms.DistanceAlgorithm;
-import dk.au.cs.eagleEye.algorithms.LocalizationAlgorithm;
-import dk.au.cs.eagleEye.algorithms.Euclidean;
-import dk.au.cs.eagleEye.algorithms.KNearestNeighbor;
 import dk.au.cs.eagleEye.main.Master;
-import java.util.List;
-import org.pi4.locutil.GeoPosition;
-import org.pi4.locutil.trace.TraceEntry;
 
 public class FingerprintingNN {  
-  public static void run(){
+  public static void run(String runName, Boolean useEuclidean, Boolean writeToCsv){
     Master m = Master.Inst();
 
-    m.ConsoleWrite("[FingerprintingNN] Start");
-
-    m.setBaseTrace(m.getOfflineTrace());
-    KNNPositionEstimator.doSimulation(100, 1, "offlineFingerprintNN", true);
+    m.ConsoleWrite("Fingerprinting: [" + runName + "] Start");
     
-    m.ConsoleWrite("[FingerprintingNN] End");
+    FingerprintingKNN.run(runName, useEuclidean, 1, writeToCsv);
+    
+    m.ConsoleWrite("Fingerprinting: [" + runName + "] End");
 
+  }
+  
+  public static void runCDFError(String runName, Boolean useEuclidean, int onlineSamples, int runs, Boolean writeToCsv){
+    Master m = Master.Inst();
+
+    m.ConsoleWrite("Fingerprinting: [" + runName + "] Start");
+    
+    FingerprintingKNN.runCDFError(runName, useEuclidean, 1, onlineSamples, runs, writeToCsv);
+    
+    m.ConsoleWrite("Fingerprinting: [" + runName + "] End");
   }
 }
